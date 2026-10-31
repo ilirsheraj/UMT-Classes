@@ -1,0 +1,198 @@
+EXCEL PRACTICE - COMPUTATIONAL THINKING IN A SPREADSHEET
+Answer key: formulas and expected results
+=====================================================================
+
+Results are for the data as given in the workbook, before the
+"change a number" tasks. "Copy down" means: write the formula in the
+first cell, then drag the fill handle down. Excel adjusts the row
+numbers by itself (the "loop").
+
+
+---------------------------------------------------------------------
+SHEET 1 - CAKE COST   (multiplication, copy down, SUM, IF)
+---------------------------------------------------------------------
+
+Task 1  Cost of each ingredient (E12 is the given example)
+        E12:  =B12*D12          -> 60   (Flour)
+        E13:  =B13*D13          -> 42   (Sugar)
+        E14:  =B14*D14          -> 80   (Eggs)
+        E15:  =B15*D15          -> 225  (Butter)
+        E16:  =B16*D16          -> 120  (Cocoa)
+
+Task 2  Total cost
+        E17:  =SUM(E12:E16)     -> 527
+
+Task 3  Cost per slice
+        E18:  =E17/H12          -> 52.7
+
+Task 4  Budget check
+        E19:  =IF(E17<=H13,"Within budget","Over budget")
+                                -> Over budget
+
+Task 5  Butter price 700: butter cost 175, total 477, per slice 47.7,
+        result "Within budget".
+
+
+---------------------------------------------------------------------
+SHEET 2 - GRADES   (IF, nested IF, COUNTIF, AVERAGE)
+---------------------------------------------------------------------
+
+Task 1  Pass / Fail (copy down to C30)
+        C11:  =IF(B11>=50,"Pass","Fail")
+
+Task 2  Grade - bonus (copy down to D30)
+        D11:  =IF(B11>=90,"A",IF(B11>=70,"B",IF(B11>=50,"C","Fail")))
+
+        Expected results:
+        Student    Score  Result  Grade
+        Arta         78   Pass    B
+        Besnik       45   Fail    Fail
+        Klea         92   Pass    A
+        Dritan       66   Pass    C
+        Elira        51   Pass    C
+        Fatjon       38   Fail    Fail
+        Gentiana     85   Pass    B
+        Ilir         99   Pass    A
+        Jonida       57   Pass    C
+        Kristi       70   Pass    B
+        Ledio        49   Fail    Fail
+        Mirela       63   Pass    C
+        Noel         88   Pass    B
+        Orinda       74   Pass    B
+        Petrit       30   Fail    Fail
+        Rea          95   Pass    A
+        Sokol        55   Pass    C
+        Teuta        68   Pass    C
+        Valon        81   Pass    B
+        Xhesika      47   Fail    Fail
+
+Task 3  Summary
+        G11  Students who passed:   =COUNTIF(C11:C30,"Pass")     -> 15
+        G12  Students who failed:   =COUNTIF(C11:C30,"Fail")     -> 5
+        G13  Scores of 90 or more:  =COUNTIF(B11:B30,">=90")     -> 3
+        G14  Number of A grades:    =COUNTIF(D11:D30,"A")        -> 3
+        G15  Pass rate:             =G11/COUNTA(A11:A30)         -> 75%
+        G16  Average score:         =AVERAGE(B11:B30)            -> 66.55
+
+Task 4  Besnik 45 -> 55: Pass, grade C. Passed 16, failed 4,
+        pass rate 80%, average 67.05.
+
+
+---------------------------------------------------------------------
+SHEET 3 - EXPENSES   (SUMIF, COUNTIF, IF)
+---------------------------------------------------------------------
+
+The $ signs lock the data range so the formula can be copied down.
+
+Task 1  Spent per category (copy down to H16)
+        H12:  =SUMIF($C$12:$C$31,F12,$D$12:$D$31)
+
+Task 2  Number of payments per category (copy down to I16)
+        I12:  =COUNTIF($C$12:$C$31,F12)
+
+Task 3  Status and money left (copy down to J16 and K16)
+        J12:  =IF(H12>G12,"Over budget","OK")
+        K12:  =G12-H12
+
+        Expected results:
+        Category       Budget   Spent   Payments  Status       Left
+        Rent           25,000  25,000       1     OK              0
+        Food           15,000  15,300       7     Over budget  -300
+        Transport       6,000   5,600       4     OK            400
+        Utilities       7,000   7,400       4     Over budget  -400
+        Entertainment   5,000   6,100       4     Over budget -1,100
+
+Task 4  Totals (row 17)
+        G17:  =SUM(G12:G16)                    -> 58,000
+        H17:  =SUM(H12:H16)                    -> 59,400
+        I17:  =SUM(I12:I16)                    -> 20
+        J17:  =IF(H17>G17,"Over budget","OK")  -> Over budget
+        K17:  =G17-H17                         -> -1,400
+
+        Payments bigger than 2,000 ALL
+        H19:  =COUNTIF(D12:D31,">2000")        -> 8
+
+Task 5  Bowling set to 0: Entertainment spent 4,600 -> "OK" with 400
+        left. Total spent 57,900, so the whole month becomes "OK" with
+        100 left.
+
+
+---------------------------------------------------------------------
+SHEET 4 - SHOP   (XLOOKUP, IF)
+---------------------------------------------------------------------
+
+Task 1  Product name (copy down to B17)
+        B13:  =XLOOKUP(A13,$G$13:$G$22,$H$13:$H$22,"Not found")
+
+Task 2  Price and line total (copy down to C17 and E17)
+        C13:  =XLOOKUP(A13,$G$13:$G$22,$J$13:$J$22,0)
+        E13:  =C13*D13
+
+        Expected results:
+        Code  Product                   Price  Qty  Line total
+        C01   Chocolate cake (whole)    2,400   1     2,400
+        C03   Muffin                      250   6     1,500
+        C07   Cappuccino                  200   4       800
+        C10   Gift box                    350   1       350
+        C09   Birthday candles (pack)     150   2       300
+
+Task 3  Subtotal, delivery and total
+        E18:  =SUM(E13:E17)        -> 5,350
+        E19:  =IF(E18>=K13,0,K14)  -> 0   (free delivery)
+        E20:  =E18+E19             -> 5,350
+
+Task 4  Muffins 6 -> 2: subtotal 4,350 is below 5,000, so delivery
+        is 300 and the total is 4,650.
+
+Bonus   Code C99: with the 4th argument the product shows "Not found"
+        and the price 0. Without the 4th argument Excel shows #N/A.
+
+For older Excel without XLOOKUP (Excel 2019 or earlier):
+        B13:  =IFERROR(INDEX($H$13:$H$22,MATCH(A13,$G$13:$G$22,0)),"Not found")
+        C13:  =IFERROR(INDEX($J$13:$J$22,MATCH(A13,$G$13:$G$22,0)),0)
+
+
+---------------------------------------------------------------------
+SHEET 5 - LOAN   (PMT, IF, COUNTIF)
+---------------------------------------------------------------------
+
+Inputs: B14 loan 1,000,000 ALL, B15 rate 6%, B16 years 3,
+        B17 income 70,000 ALL, B18 max share 40%
+
+Task 1  B20  Monthly interest rate:  =B15/12          -> 0.50%
+        B21  Number of payments:     =B16*12          -> 36
+
+Task 2  B22  Monthly payment:        =PMT(B20,B21,-B14)
+                                                      -> 30,422 ALL
+
+Task 3  B23  Total paid:             =B22*B21         -> 1,095,190 ALL
+        B24  Total interest:         =B23-B14         -> 95,190 ALL
+        B25  Max payment allowed:    =B17*B18         -> 28,000 ALL
+
+Task 4  B26  Decision:
+             =IF(B22<=B25,"Approve","Offer a longer term")
+                                      -> Offer a longer term
+
+Task 5  Compare terms (copy down from row 14 to row 18)
+        E14:  =PMT($B$15/12,D14*12,-$B$14)
+        F14:  =E14*D14*12-$B$14
+        G14:  =IF(E14<=$B$25,"Approve","Too high")
+
+        Expected results:
+        Years   Monthly payment   Total interest   Decision
+          1         86,066            32,797       Too high
+          2         44,321            63,695       Too high
+          3         30,422            95,190       Too high
+          4         23,485           127,281       Approve
+          5         19,333           159,968       Approve
+
+        Terms approved
+        G20:  =COUNTIF(G14:G18,"Approve")       -> 2
+
+Task 6  Income 90,000: max payment 36,000. The 3-year payment of
+        30,422 is now approved. In the comparison, 3, 4 and 5 years
+        are approved, so COUNTIF gives 3.
+
+Why the minus sign in PMT? Excel follows money from your point of
+view: the loan you receive is money in (+), the payments are money
+out (-). Writing -B14 makes the payment come out as a positive number.
